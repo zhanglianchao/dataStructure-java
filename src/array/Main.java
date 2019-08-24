@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		ArraySelf<Integer> arr=new ArraySelf<Integer>(20);
-		for(int i=0;i<10;i++)
+		for(int i=0;i<30;i++)
 			arr.addLast(i+1);
 		arr.addAtIndex(1, 100);
 		arr.addFirst(-1);

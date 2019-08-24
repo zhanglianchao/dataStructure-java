@@ -54,10 +54,14 @@ public class ArraySelf<E> {
 	
 	//指定位置添加新元素
 	public void addAtIndex(int index,E e){
-		if(size==data.length)
-			throw new IllegalArgumentException("数组添加元素失败，数组已满");
+		
 		if(index<0||index>size)
 			throw new IllegalArgumentException("数组添加元素失败，索引非法");
+		if(size==data.length){
+			resize(2*data.length);
+		}
+		//throw new IllegalArgumentException("数组添加元素失败，数组已满");
+
 		//依次移位实现后移
 		for(int i=size-1;i>=index;i--){
 			data[i+1]=data[i];
@@ -67,6 +71,7 @@ public class ArraySelf<E> {
 		
 	}
 
+	
 	//从数组中删除index位置元素，返回删除的元素
 	public E remove(int index){
 		E res = data[index];
@@ -77,6 +82,10 @@ public class ArraySelf<E> {
 		}
 		data[size] = null;//将不引用的对象置空，正确被垃圾回收
 		size--;
+		
+		if(size == data.length/4 && data.length / 2 != 0 )//  /4才缩小容量，防止时间复杂度震荡，即删除和添加反复操作，
+			resize(data.length / 2);
+		
 		return res;
 	}
 	
@@ -104,6 +113,17 @@ public class ArraySelf<E> {
 		return data[index];
 	}
 	
+	//获取最后一个元素
+	public E getLast(){
+		return get(size-1);
+	}
+	
+	//获取第一个元素
+	public E getFirst(){
+		return get(0);
+	}
+	
+	
 	//修改指定位置的元素
 		public void set(int index,E e){
 			if(index<0||index>=size)
@@ -129,10 +149,7 @@ public class ArraySelf<E> {
 			return -1;
 		}
 	
-		
-		
-		
-		
+						
 	@Override
 	public String toString(){
 		StringBuilder res = new StringBuilder();
@@ -149,5 +166,19 @@ public class ArraySelf<E> {
 		return res.toString();
 		
 	}
+	
+	/**
+	 * @param i
+	 */
+	private void resize(int newCapacity) {
+		E[] newData = (E[]) new Object[newCapacity];
+		for(int i = 0;i < size;i++){
+			newData[i] = data[i];
+		}
+		data = newData;
+		newData = null;
+		
+	}
+	
 	
 }
